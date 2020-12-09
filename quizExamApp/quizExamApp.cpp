@@ -1,100 +1,128 @@
 #include <iostream>
-#include <windows.h>
 #include <conio.h>
+#include <windows.h>
+#include <cstdlib>
+
+
+HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto
+COORD CursorPosition; // used for goto
 
 void color(int color)
 {
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+	SetConsoleTextAttribute(console, color);
 }
 
-void gotoxy(int x, int y)
+void gotoXY(int x, int y)
 {
-	COORD c;
-	c.X = x;
-	c.Y = y;
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
-}
-
-
-
-
-
-
-
-
-
-
-
-
+	CursorPosition.X = x;
+	CursorPosition.Y = y;
+	SetConsoleCursorPosition(console, CursorPosition);
+}// function defined below if this is new to you.
 
 int main()
 {
-	int Set[] = { 7,7,7 };
-	int counter = 2;
-	char key;
+	int Set[] = { 7,7,7,7,7,7,7,7 };
+	int menu_item = 0, run, x = 7;
+	bool running = true;
 
-	for (int i = 0 ;;)
+	gotoXY(18, 5);
+	std::cout << "Main Menu";
+	color(Set[0]);
+	gotoXY(18, 7);
+	std::cout << "> ";
+
+	while (running)
 	{
-		key = _getch();
-		gotoxy(10, 5);
-		color(Set[0]);
-		std::cout << "1. Start ";
-
-		gotoxy(10, 6);
+		gotoXY(20, 7);
 		color(Set[1]);
-		std::cout << "2. Info ";
-
-		gotoxy(10, 7);
+		std::cout << "1) Input";
 		color(Set[2]);
-		std::cout << "3. Help ";
+		gotoXY(20, 8);
+		color(Set[3]);
+		std::cout << "2) Output";
+		gotoXY(20, 9);
+		color(Set[4]);
+		std::cout << "3) ...";
+		color(Set[5]);
+		gotoXY(20, 10);
+		color(Set[6]);
+		std::cout << "4) ...";
+		gotoXY(20, 11);
+		color(Set[7]);
+		std::cout << "Quit Program";
 
-		if (key == 72 && (counter >= 2 && counter <= 3))
+		system("pause>nul"); // the >nul bit causes it the print no message
+
+		if (GetAsyncKeyState(VK_DOWN) && x != 11) //down button pressed
 		{
-			counter--;
-		}
-		
-		if (key == 80 && (counter >= 1 && counter <= 2))
-		{
-			counter++;
+			gotoXY(18, x);
+			std::cout << "  ";
+			x++;
+			gotoXY(18, x);
+			std::cout << "> ";
+			menu_item++;
+			continue;
+
 		}
 
-		if(key == '\r')
+		if (GetAsyncKeyState(VK_UP) && x != 7) //up button pressed
 		{
-			if (counter == 1)
-			{
-				std::cout << "Menu 1 is open";
+			gotoXY(18, x);
+			std::cout << "  ";
+			x--;
+			gotoXY(18, x);
+			std::cout << "> ";
+			menu_item--;
+			continue;
+		}
+
+		if (GetAsyncKeyState(VK_RETURN)) { // Enter key pressed
+
+			switch (menu_item) {
+
+			case 0: {
+
+				gotoXY(20, 16);
+				Set[1] = 12;
+				std::cout << "You chose Input...     ";
+				break;
 			}
-			
-			if (counter == 2)
-			{
-				std::cout << "Menu 2 is open";
+
+
+			case 1: {
+				gotoXY(20, 16);
+				Set[2] = 12;
+				std::cout << "You chose Output...     ";
+				break;
 			}
 
-			if (counter == 3)
-			{
-				std::cout << "Menu 3 is open";
+			case 2: {
+				gotoXY(20, 16);
+				Set[3] = 12;
+				std::cout << "You chose Option 3...     ";
+				break;
 			}
+
+			case 3: {
+				gotoXY(20, 16);
+				Set[4] = 12;
+				std::cout << "You chose Option 4...     ";
+				break;
+			}
+
+			case 4: {
+				gotoXY(20, 16);
+				Set[5] = 12;
+				std::cout << "The program has now terminated!!";
+				running = false;
+			}
+
+			}
+
 		}
 
-		Set[0] = 7;
-		Set[1] = 7;
-		Set[2] = 7;
-		if (counter == 1)
-		{
-			Set[0] = 12;
-		}
-
-		if (counter == 2)
-		{
-			Set[1] = 12;
-		}
-
-		if (counter == 3)
-		{
-			Set[2] = 12;
-		}
 	}
-	return 0;
-	
 
+	gotoXY(20, 21);
+	return 0;
 }
