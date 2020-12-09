@@ -7,10 +7,6 @@
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto
 COORD CursorPosition; // used for goto
 
-void color(int color)
-{
-	SetConsoleTextAttribute(console, color);
-}
 void Menu();
 
 void gotoXY(int x, int y)
@@ -45,7 +41,7 @@ void subMenu()
 
 		system("pause>nul");
 
-		if (GetAsyncKeyState(VK_DOWN) && x != 11) //down button pressed
+		if (GetAsyncKeyState(VK_DOWN) && x != 10) //down button pressed
 		{
 			gotoXY(18, x);
 			std::cout << "  ";
@@ -116,17 +112,11 @@ void Menu()
 		gotoXY(20, 7);
 		std::cout << "1) Input";
 		gotoXY(20, 8);
-		std::cout << "2) Output";
-		gotoXY(20, 9);
-		std::cout << "3) ...";
-		gotoXY(20, 10);
-		std::cout << "4) ...";
-		gotoXY(20, 11);
 		std::cout << "Quit Program";
 
 		system("pause>nul"); // the >nul bit causes it the print no message
 
-		if (GetAsyncKeyState(VK_DOWN) && x != 11) //down button pressed
+		if (GetAsyncKeyState(VK_DOWN) && x != 8) //down button pressed
 		{
 			gotoXY(18, x);
 			std::cout << "  ";
@@ -153,39 +143,22 @@ void Menu()
 
 			switch (menu_item) {
 
-			case 0: {
+				case 0: {
 
-				gotoXY(20, 16);
-				subMenu();
-				running = false;
-				break;
-			}
+					gotoXY(20, 16);
+					subMenu();
+					running = false;
+					break;
+				}
 
 
-			case 1: {
-				gotoXY(20, 16);
-				std::cout << "You chose Output...     ";
-				break;
-			}
-
-			case 2: {
-				gotoXY(20, 16);
-				std::cout << "You chose Option 3...     ";
-				break;
-			}
-
-			case 3: {
-				gotoXY(20, 16);
-				std::cout << "You chose Option 4...     ";
-				break;
-			}
-
-			case 4: {
-				gotoXY(20, 16);
-				std::cout << "The program has now terminated!!";
-				running = false;
-			}
-
+				case 1: {
+					gotoXY(20, 16);
+					std::cout << "The program has now terminated!!";
+					exit(0);
+					running = false;
+					break;
+				}
 			}
 
 		}
