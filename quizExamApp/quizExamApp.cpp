@@ -11,6 +11,7 @@ void color(int color)
 {
 	SetConsoleTextAttribute(console, color);
 }
+void Menu();
 
 void gotoXY(int x, int y)
 {
@@ -19,36 +20,108 @@ void gotoXY(int x, int y)
 	SetConsoleCursorPosition(console, CursorPosition);
 }// function defined below if this is new to you.
 
-int main()
+void cls()
 {
-	int Set[] = { 7,7,7,7,7,7,7,7 };
+	system("CLS");
+}
+
+void subMenu()
+{
+	cls();
+	gotoXY(18, 5);
+	std::cout << "Submenu";
+	bool running_subMenu = true;
+	int subMenu_item = 0, run, x = 7;
+	while (running_subMenu)
+	{
+		gotoXY(20, 7);
+		std::cout << "1) Matan";
+		gotoXY(20, 8);
+		std::cout << "2) AIG";
+		gotoXY(20, 9);
+		std::cout << "3) Proga";
+		gotoXY(20, 10);
+		std::cout << "4) Return";
+
+		system("pause>nul");
+
+		if (GetAsyncKeyState(VK_DOWN) && x != 11) //down button pressed
+		{
+			gotoXY(18, x);
+			std::cout << "  ";
+			x++;
+			gotoXY(18, x);
+			std::cout << "> ";
+			subMenu_item++;
+			continue;
+		}
+
+		if (GetAsyncKeyState(VK_UP) && x != 7) //up button pressed
+		{
+			gotoXY(18, x);
+			std::cout << "  ";
+			x--;
+			gotoXY(18, x);
+			std::cout << "> ";
+			subMenu_item--;
+			continue;
+		}
+
+		if (GetAsyncKeyState(VK_RETURN)) { // Enter key pressed
+
+			switch (subMenu_item) {
+
+				case 0: {
+
+					gotoXY(20, 16);
+					std::cout << "You chose Matan    ";
+					break;
+				}
+
+
+				case 1: {
+					gotoXY(20, 16);
+					std::cout << "You chose AIG     ";
+					break;
+				}
+
+				case 2: {
+					gotoXY(20, 16);
+					std::cout << "You chose Proga    ";
+					break;
+				}
+
+				case 3: {
+					cls();
+					Menu();
+					break;
+					}
+			}
+		}
+	}
+}
+
+void Menu()
+{
 	int menu_item = 0, run, x = 7;
 	bool running = true;
 
 	gotoXY(18, 5);
 	std::cout << "Main Menu";
-	color(Set[0]);
 	gotoXY(18, 7);
 	std::cout << "> ";
 
 	while (running)
 	{
 		gotoXY(20, 7);
-		color(Set[1]);
 		std::cout << "1) Input";
-		color(Set[2]);
 		gotoXY(20, 8);
-		color(Set[3]);
 		std::cout << "2) Output";
 		gotoXY(20, 9);
-		color(Set[4]);
 		std::cout << "3) ...";
-		color(Set[5]);
 		gotoXY(20, 10);
-		color(Set[6]);
 		std::cout << "4) ...";
 		gotoXY(20, 11);
-		color(Set[7]);
 		std::cout << "Quit Program";
 
 		system("pause>nul"); // the >nul bit causes it the print no message
@@ -83,36 +156,32 @@ int main()
 			case 0: {
 
 				gotoXY(20, 16);
-				Set[1] = 12;
-				std::cout << "You chose Input...     ";
+				subMenu();
+				running = false;
 				break;
 			}
 
 
 			case 1: {
 				gotoXY(20, 16);
-				Set[2] = 12;
 				std::cout << "You chose Output...     ";
 				break;
 			}
 
 			case 2: {
 				gotoXY(20, 16);
-				Set[3] = 12;
 				std::cout << "You chose Option 3...     ";
 				break;
 			}
 
 			case 3: {
 				gotoXY(20, 16);
-				Set[4] = 12;
 				std::cout << "You chose Option 4...     ";
 				break;
 			}
 
 			case 4: {
 				gotoXY(20, 16);
-				Set[5] = 12;
 				std::cout << "The program has now terminated!!";
 				running = false;
 			}
@@ -124,5 +193,10 @@ int main()
 	}
 
 	gotoXY(20, 21);
+}
+
+int main()
+{
+	Menu();
 	return 0;
 }
