@@ -1,0 +1,2 @@
+C:\Users\tomov\source\repos\curseovaya\quizExamApp\Debug\quizExamApp.exe
+C:\Users\tomov\source\repos\curseovaya\quizExamApp\Debug\quizExamApp.pdb
