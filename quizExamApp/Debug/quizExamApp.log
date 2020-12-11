@@ -1,4 +1,4 @@
 ﻿  quizExamApp.cpp
-C:\Users\tomov\source\repos\curseovaya\quizExamApp\quizExamApp.cpp(30,24): warning C4101: 'run': unreferenced local variable
-C:\Users\tomov\source\repos\curseovaya\quizExamApp\quizExamApp.cpp(102,21): warning C4101: 'run': unreferenced local variable
+C:\Users\tomov\source\repos\curseovaya\quizExamApp\quizExamApp.cpp(112,24): warning C4101: 'run': unreferenced local variable
+C:\Users\tomov\source\repos\curseovaya\quizExamApp\quizExamApp.cpp(184,21): warning C4101: 'run': unreferenced local variable
   quizExamApp.vcxproj -> C:\Users\tomov\source\repos\curseovaya\quizExamApp\Debug\quizExamApp.exe
