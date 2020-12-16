@@ -9,8 +9,8 @@
 #include <stdio.h>
 
 
-HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto
-COORD CursorPosition; // used for goto
+HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+COORD CursorPosition;
 
 void Menu();
 
@@ -30,9 +30,7 @@ void subMenu();
 
 bool iterateFile(const std::string& fileName, std::function<void(const std::string&)> callback)
 {
-	// Open the File
 	std::ifstream in(fileName.c_str());
-	// Check if object is valid
 	if (!in)
 	{
 		gotoXY(18, 5);
@@ -40,13 +38,10 @@ bool iterateFile(const std::string& fileName, std::function<void(const std::stri
 		return false;
 	}
 	std::string str;
-	// Read the next line from File until it reaches the end.
 	while (std::getline(in, str))
 	{
-		// Call the given callback
 		callback(str);
 	}
-	//Close The File
 	in.close();
 	return true;
 }
@@ -61,8 +56,6 @@ void writeInFile(const std::string& filename) {
 int countPoints(const std::string& filename) {
 	int count = 0;
 	std::string line;
-
-	/* Creating input filestream */
 	std::ifstream file(filename);
 	while (getline(file, line))
 		count++;
@@ -79,23 +72,28 @@ void clearFileData(const std::string& filename)
 
 void readFile(const std::string& fileName)
 {
-	//std::string line;
 	int totalLines = 0;
 	std::vector<std::string> lines;
 	bool res = iterateFile(fileName, [&](const std::string& str)
-	{
-		// Add to vector
-		lines.push_back(str);
-		totalLines++;
-	});
+		{
+			lines.push_back(str);
+			totalLines++;
+		});
 
 	int random_number = rand() % totalLines;
 
 	gotoXY(18, 5);
 	std::cout << lines[random_number];
+}
 
+void subsubMenu(const std::string& filename) {
 	int item = 0, x = 9;
 	bool running = true;
+	gotoXY(18, 9);
+	std::cout << "> ";
+	clearFileData("rightanswers.txt");
+	clearFileData("numberoftries.txt");
+	readFile(filename);
 	while (running)
 	{
 		gotoXY(20, 9);
@@ -103,14 +101,17 @@ void readFile(const std::string& fileName)
 		gotoXY(20, 10);
 		std::cout << "Следующий вопрос";
 		gotoXY(20, 11);
-		std::cout << "Текущий результат";
-		gotoXY(20, 12);
 		std::cout << "Назад";
+
+		gotoXY(18, 18);
+		std::cout << "Правильные ответы: " << countPoints("rightanswers.txt");
+		gotoXY(18, 19);
+		std::cout << "Количество попыток: " << countPoints("numberoftries.txt");
 
 
 		system("pause>nul");
 
-		if (GetAsyncKeyState(VK_DOWN) && x != 12) //down button pressed
+		if (GetAsyncKeyState(VK_DOWN) && x != 11)
 		{
 			gotoXY(18, x);
 			std::cout << "  ";
@@ -121,7 +122,7 @@ void readFile(const std::string& fileName)
 			continue;
 		}
 
-		if (GetAsyncKeyState(VK_UP) && x != 9) //up button pressed
+		if (GetAsyncKeyState(VK_UP) && x != 9)
 		{
 			gotoXY(18, x);
 			std::cout << "  ";
@@ -134,7 +135,6 @@ void readFile(const std::string& fileName)
 
 		if (GetAsyncKeyState(VK_RETURN))
 		{
-			// Enter key pressed
 
 			switch (item)
 			{
@@ -143,27 +143,19 @@ void readFile(const std::string& fileName)
 				writeInFile("rightanswers.txt");
 				writeInFile("numberoftries.txt");
 					cls();
-					readFile(fileName);
+					readFile(filename);
 					break;
 				}
 
-			case 1: {
+			case 1: 
+			{
 				writeInFile("numberoftries.txt");
 					cls();
-					readFile(fileName);
-					break;
-				}
-
-			case 2:
-				{
-				gotoXY(18, 18);
-		std::cout << "Правильные ответы: " << countPoints("rightanswers.txt");
-		gotoXY(18, 19);
-		std::cout << "Количество попыток: " << countPoints("numberoftries.txt");
+					readFile(filename);
 					break;
 				}
 				
-			case 3:
+			case 2:
 				{
 					cls();
 					clearFileData("rightanswers.txt");
@@ -181,6 +173,8 @@ void subMenu()
 	cls();
 	gotoXY(18, 5);
 	std::cout << "Выберите предмет";
+	gotoXY(18, 7);
+	std::cout << "> ";
 	bool running_subMenu = true;
 	int subMenu_item = 0, x = 7;
 	while (running_subMenu)
@@ -196,7 +190,7 @@ void subMenu()
 
 		system("pause>nul");
 
-		if (GetAsyncKeyState(VK_DOWN) && x != 10) //down button pressed
+		if (GetAsyncKeyState(VK_DOWN) && x != 10)
 		{
 			gotoXY(18, x);
 			std::cout << "  ";
@@ -207,7 +201,7 @@ void subMenu()
 			continue;
 		}
 
-		if (GetAsyncKeyState(VK_UP) && x != 7) //up button pressed
+		if (GetAsyncKeyState(VK_UP) && x != 7)
 		{
 			gotoXY(18, x);
 			std::cout << "  ";
@@ -220,15 +214,13 @@ void subMenu()
 
 		if (GetAsyncKeyState(VK_RETURN))
 		{
-			// Enter key pressed
-
 			switch (subMenu_item)
 			{
 			case 0:
 				{
 					gotoXY(20, 16);
 					cls();
-					readFile("matan.txt");
+					subsubMenu("matan.txt");
 					break;
 				}
 
@@ -236,7 +228,7 @@ void subMenu()
 				{
 					gotoXY(20, 16);
 					cls();
-					readFile("aig.txt");
+					subsubMenu("aig.txt");
 					break;
 				}
 
@@ -244,7 +236,7 @@ void subMenu()
 				{
 					gotoXY(20, 16);
 					cls();
-					readFile("prog.txt");
+					subsubMenu("prog.txt");
 					break;
 				}
 
@@ -276,9 +268,9 @@ void Menu()
 		gotoXY(20, 8);
 		std::cout << "   Выйти";
 
-		system("pause>nul"); // the >nul bit causes it the print no message
+		system("pause>nul");
 
-		if (GetAsyncKeyState(VK_DOWN) && x != 8) //down button pressed
+		if (GetAsyncKeyState(VK_DOWN) && x != 8)
 		{
 			gotoXY(18, x);
 			std::cout << "  ";
@@ -289,7 +281,7 @@ void Menu()
 			continue;
 		}
 
-		if (GetAsyncKeyState(VK_UP) && x != 7) //up button pressed
+		if (GetAsyncKeyState(VK_UP) && x != 7)
 		{
 			gotoXY(18, x);
 			std::cout << "  ";
@@ -302,8 +294,6 @@ void Menu()
 
 		if (GetAsyncKeyState(VK_RETURN))
 		{
-			// Enter key pressed
-
 			switch (menu_item)
 			{
 			case 0:
@@ -325,7 +315,6 @@ void Menu()
 		}
 	}
 
-	gotoXY(20, 21);
 }
 
 int main()
