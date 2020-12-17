@@ -30,7 +30,7 @@ void subMenu();
 
 bool iterateFile(const std::string& fileName, std::function<void(const std::string&)> callback)
 {
-	std::ifstream in(fileName.c_str());
+	std::ifstream in(fileName);
 	if (!in)
 	{
 		gotoXY(18, 5);
@@ -144,6 +144,7 @@ void subsubMenu(const std::string& filename) {
 				writeInFile("numberoftries.txt");
 					cls();
 					readFile(filename);
+					running = false;
 					break;
 				}
 
@@ -152,6 +153,7 @@ void subsubMenu(const std::string& filename) {
 				writeInFile("numberoftries.txt");
 					cls();
 					readFile(filename);
+					running = false;
 					break;
 				}
 				
@@ -161,6 +163,7 @@ void subsubMenu(const std::string& filename) {
 					clearFileData("rightanswers.txt");
 					clearFileData("numberoftries.txt");
 					subMenu();
+					running = false;
 					break;
 				}
 			}
@@ -221,6 +224,7 @@ void subMenu()
 					gotoXY(20, 16);
 					cls();
 					subsubMenu("matan.txt");
+					running_subMenu = false;
 					break;
 				}
 
@@ -229,6 +233,7 @@ void subMenu()
 					gotoXY(20, 16);
 					cls();
 					subsubMenu("aig.txt");
+					running_subMenu = false;
 					break;
 				}
 
@@ -237,6 +242,7 @@ void subMenu()
 					gotoXY(20, 16);
 					cls();
 					subsubMenu("prog.txt");
+					running_subMenu = false;
 					break;
 				}
 
@@ -244,6 +250,7 @@ void subMenu()
 				{
 					cls();
 					Menu();
+					running_subMenu = false;
 					break;
 				}
 			}
