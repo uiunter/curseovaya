@@ -89,6 +89,8 @@ void readFile(const std::string& fileName)
 void subsubMenu(const std::string& filename) {
 	int item = 0, x = 9;
 	bool running = true;
+	int rightAnwers = 0;
+	int numberOfTries = 0;
 	gotoXY(18, 9);
 	std::cout << "> ";
 	clearFileData("rightanswers.txt");
@@ -104,9 +106,9 @@ void subsubMenu(const std::string& filename) {
 		std::cout << "Назад";
 
 		gotoXY(18, 18);
-		std::cout << "Правильные ответы: " << countPoints("rightanswers.txt");
+		std::cout << "Правильные ответы: " << rightAnwers;
 		gotoXY(18, 19);
-		std::cout << "Количество попыток: " << countPoints("numberoftries.txt");
+		std::cout << "Количество попыток: " << numberOfTries;
 
 
 		system("pause>nul");
@@ -140,30 +142,30 @@ void subsubMenu(const std::string& filename) {
 			{
 			case 0:
 				{
-				writeInFile("rightanswers.txt");
-				writeInFile("numberoftries.txt");
+				//writeInFile("rightanswers.txt");
+				//writeInFile("numberoftries.txt");
+				rightAnwers++;
+				numberOfTries++;
 					cls();
 					readFile(filename);
-					running = false;
 					break;
 				}
 
 			case 1: 
 			{
-				writeInFile("numberoftries.txt");
+				//writeInFile("numberoftries.txt");
+				numberOfTries++;
 					cls();
 					readFile(filename);
-					running = false;
 					break;
 				}
 				
 			case 2:
 				{
 					cls();
-					clearFileData("rightanswers.txt");
-					clearFileData("numberoftries.txt");
+					//clearFileData("rightanswers.txt");
+					//clearFileData("numberoftries.txt");
 					subMenu();
-					running = false;
 					break;
 				}
 			}
@@ -224,7 +226,6 @@ void subMenu()
 					gotoXY(20, 16);
 					cls();
 					subsubMenu("matan.txt");
-					running_subMenu = false;
 					break;
 				}
 
@@ -233,7 +234,6 @@ void subMenu()
 					gotoXY(20, 16);
 					cls();
 					subsubMenu("aig.txt");
-					running_subMenu = false;
 					break;
 				}
 
@@ -242,7 +242,6 @@ void subMenu()
 					gotoXY(20, 16);
 					cls();
 					subsubMenu("prog.txt");
-					running_subMenu = false;
 					break;
 				}
 
@@ -250,7 +249,6 @@ void subMenu()
 				{
 					cls();
 					Menu();
-					running_subMenu = false;
 					break;
 				}
 			}
@@ -307,7 +305,6 @@ void Menu()
 				{
 					gotoXY(20, 16);
 					subMenu();
-					running = false;
 					break;
 				}
 
