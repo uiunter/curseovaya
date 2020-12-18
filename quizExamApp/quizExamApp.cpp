@@ -46,30 +46,6 @@ bool iterateFile(const std::string& fileName, std::function<void(const std::stri
 	return true;
 }
 
-void writeInFile(const std::string& filename) {
-	std::fstream myfile;
-	myfile.open(filename, std::fstream::in | std::fstream::out | std::fstream::app);
-	myfile << "1" << std::endl;
-	myfile.close();
-}
-
-int countPoints(const std::string& filename) {
-	int count = 0;
-	std::string line;
-	std::ifstream file(filename);
-	while (getline(file, line))
-		count++;
-	return count;
-}
-
-void clearFileData(const std::string& filename)
-{
-	std::ofstream ofs;
-	ofs.open(filename, std::ofstream::out | std::ofstream::trunc);
-	ofs.close();
-}
-
-
 void readFile(const std::string& fileName)
 {
 	int totalLines = 0;
@@ -87,52 +63,72 @@ void readFile(const std::string& fileName)
 }
 
 void subsubMenu(const std::string& filename) {
-	int item = 0, x = 9;
+	int item = 0, coord_item_x = 20, coord_pointer_x = coord_item_x - 2, coord_y = 9;
+	const int coord_lowest_y = coord_y * 2;
+	const int highestPosition = coord_y;
+	const int menuLines = 3;
+	const int lowestPosition = highestPosition + 3 - 1;
 	bool running = true;
 	int rightAnwers = 0;
 	int numberOfTries = 0;
-	gotoXY(18, 9);
+	gotoXY(coord_pointer_x, coord_y);
 	std::cout << "> ";
-	clearFileData("rightanswers.txt");
-	clearFileData("numberoftries.txt");
 	readFile(filename);
 	while (running)
 	{
-		gotoXY(20, 9);
+		gotoXY(coord_item_x, highestPosition);
 		std::cout << "Правильно";
-		gotoXY(20, 10);
+		gotoXY(coord_item_x, highestPosition + 1);
 		std::cout << "Следующий вопрос";
-		gotoXY(20, 11);
+		gotoXY(coord_item_x, lowestPosition);
 		std::cout << "Назад";
 
-		gotoXY(18, 18);
+		gotoXY(coord_item_x, coord_lowest_y);
 		std::cout << "Правильные ответы: " << rightAnwers;
-		gotoXY(18, 19);
+		gotoXY(coord_item_x, coord_lowest_y + 1);
 		std::cout << "Количество попыток: " << numberOfTries;
 
 
 		system("pause>nul");
 
-		if (GetAsyncKeyState(VK_DOWN) && x != 11)
+		if (GetAsyncKeyState(VK_DOWN) && coord_y < lowestPosition)
 		{
-			gotoXY(18, x);
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "  ";
-			x++;
-			gotoXY(18, x);
+			coord_y++;
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "> ";
 			item++;
-			continue;
+		} else if (GetAsyncKeyState(VK_DOWN) && coord_y == lowestPosition)
+		{
+			gotoXY(coord_pointer_x, lowestPosition);
+			std::cout << "  ";
+			gotoXY(coord_pointer_x, highestPosition);
+			std::cout << "  ";
+			coord_y = highestPosition;
+			gotoXY(coord_pointer_x, coord_y);
+			std::cout << "> ";
+			item = 0;
 		}
 
-		if (GetAsyncKeyState(VK_UP) && x != 9)
+		if (GetAsyncKeyState(VK_UP) && coord_y > highestPosition)
 		{
-			gotoXY(18, x);
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "  ";
-			x--;
-			gotoXY(18, x);
+			coord_y--;
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "> ";
 			item--;
-			continue;
+		} else if (GetAsyncKeyState(VK_UP) && coord_y == highestPosition)
+		{
+			gotoXY(coord_pointer_x, highestPosition);
+			std::cout << "  ";
+			gotoXY(coord_pointer_x, lowestPosition);
+			std::cout << "  ";
+			coord_y = lowestPosition;
+			gotoXY(coord_pointer_x, lowestPosition);
+			std::cout << "> ";
+			item = menuLines - 1;
 		}
 
 		if (GetAsyncKeyState(VK_RETURN))
@@ -142,8 +138,6 @@ void subsubMenu(const std::string& filename) {
 			{
 			case 0:
 				{
-				//writeInFile("rightanswers.txt");
-				//writeInFile("numberoftries.txt");
 				rightAnwers++;
 				numberOfTries++;
 					cls();
@@ -153,7 +147,6 @@ void subsubMenu(const std::string& filename) {
 
 			case 1: 
 			{
-				//writeInFile("numberoftries.txt");
 				numberOfTries++;
 					cls();
 					readFile(filename);
@@ -163,8 +156,6 @@ void subsubMenu(const std::string& filename) {
 			case 2:
 				{
 					cls();
-					//clearFileData("rightanswers.txt");
-					//clearFileData("numberoftries.txt");
 					subMenu();
 					break;
 				}
@@ -176,45 +167,66 @@ void subsubMenu(const std::string& filename) {
 void subMenu()
 {
 	cls();
-	gotoXY(18, 5);
-	std::cout << "Выберите предмет";
-	gotoXY(18, 7);
-	std::cout << "> ";
 	bool running_subMenu = true;
-	int subMenu_item = 0, x = 7;
+	int menuLines = 4;
+	int subMenu_item = 0, coord_item_x = 20, coord_pointer_x = coord_item_x - 2, coord_y = 7;
+	const int highestPosition = coord_y;
+	const int lowestPosition = highestPosition + menuLines - 1;
+	gotoXY(coord_pointer_x, coord_y - 2);
+	std::cout << "Выберите предмет";
+	gotoXY(coord_pointer_x, coord_y);
+	std::cout << "> ";
 	while (running_subMenu)
 	{
-		gotoXY(20, 7);
+		gotoXY(coord_item_x, highestPosition);
 		std::cout << "1. Математический Анализ";
-		gotoXY(20, 8);
+		gotoXY(coord_item_x, highestPosition + 1);
 		std::cout << "2. Алгебра и Геометрия";
-		gotoXY(20, 9);
+		gotoXY(coord_item_x, highestPosition + 2);
 		std::cout << "3. Программирование";
-		gotoXY(20, 10);
+		gotoXY(coord_item_x, lowestPosition);
 		std::cout << "4. Назад";
 
 		system("pause>nul");
 
-		if (GetAsyncKeyState(VK_DOWN) && x != 10)
+		if (GetAsyncKeyState(VK_DOWN) && (coord_y < lowestPosition))
 		{
-			gotoXY(18, x);
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "  ";
-			x++;
-			gotoXY(18, x);
+			coord_y++;
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "> ";
 			subMenu_item++;
-			continue;
-		}
+		} else if (GetAsyncKeyState(VK_DOWN) && coord_y == lowestPosition)
+			{
+				gotoXY(coord_pointer_x, lowestPosition);
+				std::cout << "  ";
+				gotoXY(coord_pointer_x, highestPosition);
+				std::cout << "  ";
+				coord_y = highestPosition;
+				gotoXY(coord_pointer_x, coord_y);
+				std::cout << "> ";
+				subMenu_item = 0;
+			}
 
-		if (GetAsyncKeyState(VK_UP) && x != 7)
+		if (GetAsyncKeyState(VK_UP) && (coord_y > highestPosition))
 		{
-			gotoXY(18, x);
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "  ";
-			x--;
-			gotoXY(18, x);
+			coord_y--;
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "> ";
 			subMenu_item--;
-			continue;
+		} else if (GetAsyncKeyState(VK_UP) && coord_y == highestPosition)
+		{
+			gotoXY(coord_pointer_x, highestPosition);
+			std::cout << "  ";
+			gotoXY(coord_pointer_x, lowestPosition);
+			std::cout << "  ";
+			coord_y = lowestPosition;
+			gotoXY(coord_pointer_x, lowestPosition);
+			std::cout << "> ";
+			subMenu_item = menuLines - 1;
 		}
 
 		if (GetAsyncKeyState(VK_RETURN))
@@ -223,7 +235,7 @@ void subMenu()
 			{
 			case 0:
 				{
-					gotoXY(20, 16);
+					gotoXY(coord_item_x, coord_y * 3);
 					cls();
 					subsubMenu("matan.txt");
 					break;
@@ -231,7 +243,7 @@ void subMenu()
 
 			case 1:
 				{
-					gotoXY(20, 16);
+					gotoXY(coord_item_x, coord_y * 3);
 					cls();
 					subsubMenu("aig.txt");
 					break;
@@ -239,7 +251,7 @@ void subMenu()
 
 			case 2:
 				{
-					gotoXY(20, 16);
+					gotoXY(coord_item_x, coord_y * 3);
 					cls();
 					subsubMenu("prog.txt");
 					break;
@@ -258,44 +270,66 @@ void subMenu()
 
 void Menu()
 {
-	int menu_item = 0, x = 7;
+	int menu_item = 0, coord_item_x = 20, coord_pointer_x = coord_item_x - 2, coord_y = 7;
+	const int coord_lowest_y = coord_y * 2;
+	const int highestPosition = coord_y;
+	const int menuLines = 2;
+	const int lowestPosition = highestPosition + (menuLines - 1);
 	bool running = true;
 
-	gotoXY(18, 5);
+	gotoXY(coord_pointer_x, coord_y - 2);
 	std::cout << "Главное меню";
-	gotoXY(18, 7);
+	gotoXY(coord_pointer_x, coord_y);
 	std::cout << "> ";
 
 	while (running)
 	{
-		gotoXY(20, 7);
+		gotoXY(coord_item_x, highestPosition);
 		std::cout << "1. Начать";
-		gotoXY(20, 8);
+		gotoXY(coord_item_x, lowestPosition);
 		std::cout << "   Выйти";
 
 		system("pause>nul");
 
-		if (GetAsyncKeyState(VK_DOWN) && x != 8)
+		if (GetAsyncKeyState(VK_DOWN) && (coord_y < lowestPosition))
 		{
-			gotoXY(18, x);
+			gotoXY(coord_pointer_x,coord_y);
 			std::cout << "  ";
-			x++;
-			gotoXY(18, x);
+			coord_y++;
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "> ";
 			menu_item++;
-			continue;
-		}
+		} else if (GetAsyncKeyState(VK_DOWN) && coord_y == lowestPosition)
+			{
+				gotoXY(coord_pointer_x, lowestPosition);
+				std::cout << "  ";
+				gotoXY(coord_pointer_x, highestPosition);
+				std::cout << "  ";
+				coord_y = highestPosition;
+				gotoXY(coord_pointer_x, coord_y);
+				std::cout << "> ";
+				menu_item = 0;
+			}
 
-		if (GetAsyncKeyState(VK_UP) && x != 7)
+		if (GetAsyncKeyState(VK_UP) && (coord_y > highestPosition))
 		{
-			gotoXY(18, x);
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "  ";
-			x--;
-			gotoXY(18, x);
+			coord_y--;
+			gotoXY(coord_pointer_x, coord_y);
 			std::cout << "> ";
 			menu_item--;
-			continue;
-		}
+		} else if (GetAsyncKeyState(VK_UP) && coord_y == highestPosition)
+				{
+					gotoXY(coord_pointer_x, highestPosition);
+					std::cout << "  ";
+					gotoXY(coord_pointer_x, lowestPosition);
+					std::cout << "  ";
+					coord_y = lowestPosition;
+					gotoXY(coord_pointer_x, lowestPosition);
+					std::cout << "> ";
+					menu_item = menuLines - 1;
+				}
 
 		if (GetAsyncKeyState(VK_RETURN))
 		{
@@ -303,7 +337,7 @@ void Menu()
 			{
 			case 0:
 				{
-					gotoXY(20, 16);
+					gotoXY(coord_item_x, coord_lowest_y);
 					subMenu();
 					break;
 				}
@@ -311,7 +345,7 @@ void Menu()
 
 			case 1:
 				{
-					gotoXY(20, 16);
+					gotoXY(coord_item_x, coord_lowest_y);
 					std::cout << "Программа завершила свое действие.";
 					exit(0);
 				}
